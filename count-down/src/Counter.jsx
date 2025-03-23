@@ -1,10 +1,16 @@
 function Counter(){
 
-    return (
-        <>
-        <h1>Top Memba</h1>
-        </>
-    )
+
+  return (
+    <>
+    <h2>Tapout</h2>
+    
+    </>
+  )
+
 }
 
+
 export default Counter
+
+
