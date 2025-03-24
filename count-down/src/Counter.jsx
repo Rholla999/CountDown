@@ -1,8 +1,8 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 function Counter(){
-  let interval = null
-  const [timer, setTimer] = useState(240)
+  const intervalRef = useRef(null)
+  const [timer, setTimer] = useState(10)
   const [isRunning, setIsRunning] = useState(false)
 
   function updateTimer(timer){
@@ -10,18 +10,24 @@ function Counter(){
     let sec = timer % 60
     return `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
   }
-  
+
 
   function startTimer(){
     if (!isRunning){
       setIsRunning(true)
-       interval = setInterval(()=>{
+       intervalRef.current = setInterval(()=>{
         setIsRunning(true)
         setTimer((time) => {
           if (time <= 0) {
             setIsRunning(false)
-            clearInterval(interval)
+            clearInterval(intervalRef.current)
             return 0;
+          } 
+          if (time <= 10) {
+            let dangerDisplay = document.querySelector('.display')
+            if (dangerDisplay){
+              dangerDisplay.classList.add('red')
+            }
           }
           return time - 1
         })
@@ -29,18 +35,23 @@ function Counter(){
     }
   }
 
-
-
-  function pauseBtn() {
+  function pauseTimer() {
     if (isRunning){
     setIsRunning(false)
-    clearInterval(interval)
+    clearInterval(intervalRef.current)
   }
 }
-  
 
+function resetTimer(){
+  clearInterval(intervalRef.current)
+  setIsRunning(false)
+  setTimer(240)
+  let dangerDisplay = document.querySelector('.display')
+            if (dangerDisplay){
+              dangerDisplay.classList.remove('red')
+            }
+}
 
-  
   return (
     <>
     <div className="container">
@@ -48,8 +59,8 @@ function Counter(){
         <h2>Count-Down</h2>
         <p className="display">{updateTimer(timer)}</p>
         <button onClick={startTimer} className="startBtn">Start</button>
-        <button  onClick={pauseBtn} className="pauseBtn">Pause</button>
-        <button className="resetBtn">Reset</button>
+        <button  onClick={pauseTimer} className="pauseBtn">Pause</button>
+        <button onClick={resetTimer} className="resetBtn">Reset</button>
       </div>
     </div>
     </>
