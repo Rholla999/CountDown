@@ -2,8 +2,9 @@ import { useRef, useState } from "react"
 
 function Counter(){
   const intervalRef = useRef(null)
-  const [timer, setTimer] = useState(10)
+  const [timer, setTimer] = useState(240)
   const [isRunning, setIsRunning] = useState(false)
+  const [input] = useState()
 
   function updateTimer(timer){
     let min = Math.floor(timer / 60)
@@ -52,15 +53,38 @@ function resetTimer(){
             }
 }
 
+function handleInputChange(e) {
+  const value = e.target.value;
+  setTimer(value); 
+}
+
+// function setCustomTimer() {
+//   const minutes = parseInt(input, 10);
+//   if (!isNaN(minutes) && minutes >= 0) {
+//     setTimer(minutes * 60); 
+//   }
+// }
+
   return (
     <>
     <div className="container">
       <div className="timer-con">
         <h2>Count-Down</h2>
         <p className="display">{updateTimer(timer)}</p>
-        <button onClick={startTimer} className="startBtn">Start</button>
-        <button  onClick={pauseTimer} className="pauseBtn">Pause</button>
+        <input 
+         type="number"
+         value={input}
+         onChange={handleInputChange}
+         placeholder="Enter Seconds"
+        />
+        <div>
+        {/* <button  onClick={setCustomTimer} className="setBtn">
+            Set Timer
+          </button> */}
+        <button onClick={startTimer}  disabled={isRunning} className="startBtn">Start</button>
+        <button  onClick={pauseTimer} disabled={!isRunning} className="pauseBtn">Pause</button>
         <button onClick={resetTimer} className="resetBtn">Reset</button>
+      </div>
       </div>
     </div>
     </>
